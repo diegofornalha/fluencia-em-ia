@@ -1,6 +1,5 @@
 ---
 sidebar_position: 0
-slug: /
 title: Bem-vindo ao Framework de Fluência em IA
 description: Aprenda as competências essenciais para trabalhar com IA de forma eficaz, eficiente, ética e segura.
 ---
