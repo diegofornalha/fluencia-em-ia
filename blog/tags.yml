@@ -1,0 +1,104 @@
+# Tags para o blog de Fluência em IA
+# Organize posts por competências, tópicos e abordagens
+
+# Competências do Framework 4D
+delegation:
+  label: Delegation
+  permalink: /delegation
+  description: Posts sobre Delegation - definir objetivos e decidir quando e como usar IA
+
+description:
+  label: Description
+  permalink: /description
+  description: Posts sobre Description - comunicar efetivamente com sistemas de IA
+
+discernment:
+  label: Discernment
+  permalink: /discernment
+  description: Posts sobre Discernment - avaliar criticamente outputs e comportamentos de IA
+
+diligence:
+  label: Diligence
+  permalink: /diligence
+  description: Posts sobre Diligence - usar IA de forma ética e responsável
+
+# Abordagens de Ensino
+ensino:
+  label: Ensino
+  permalink: /ensino
+  description: Estratégias e metodologias para ensinar Fluência em IA
+
+avaliacao:
+  label: Avaliação
+  permalink: /avaliacao
+  description: Como avaliar competências de Fluência em IA em estudantes
+
+design-de-tarefas:
+  label: Design de Tarefas
+  permalink: /design-de-tarefas
+  description: Criar tarefas autênticas que desenvolvem Fluência em IA
+
+# Loops de Competências
+delegation-diligence:
+  label: Loop Delegação-Diligência
+  permalink: /loop-delegation-diligence
+  description: Design responsável e tomada de decisão estratégica com IA
+
+description-discernment:
+  label: Loop Descrição-Discernimento
+  permalink: /loop-description-discernment
+  description: Construção de ambientes cognitivos colaborativos com IA
+
+# Modalidades de IA
+automacao:
+  label: Automação
+  permalink: /automacao
+  description: IA executando tarefas específicas baseadas em instruções humanas
+
+amplificacao:
+  label: Ampliação
+  permalink: /amplificacao
+  description: Humanos e IA colaborando como parceiros de pensamento
+
+agencia:
+  label: Agência
+  permalink: /agencia
+  description: IA executando tarefas futuras independentemente
+
+# Tópicos Práticos
+prompting:
+  label: Prompting
+  permalink: /prompting
+  description: Técnicas e estratégias para comunicação efetiva com IA
+
+etica-ia:
+  label: Ética em IA
+  permalink: /etica-ia
+  description: Considerações éticas no uso e design de sistemas de IA
+
+educacao:
+  label: Educação
+  permalink: /educacao
+  description: IA no contexto educacional e desenvolvimento de estudantes
+
+# Disciplinas
+curriculo:
+  label: Currículo
+  permalink: /curriculo
+  description: Integração de Fluência em IA em currículos e disciplinas
+
+# Recursos
+recursos:
+  label: Recursos
+  permalink: /recursos
+  description: Materiais, ferramentas e guias práticos
+
+estudos-de-caso:
+  label: Estudos de Caso
+  permalink: /estudos-de-caso
+  description: Exemplos reais de aplicação do Framework de Fluência em IA
+
+novidades:
+  label: Novidades
+  permalink: /novidades
+  description: Atualizações sobre o Framework e novas abordagens
