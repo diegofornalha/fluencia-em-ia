@@ -663,13 +663,306 @@ if erro_neo4j:
 
 ---
 
+---
+
+## 🎯 BLOQUEADOR 8: Sintaxe MCP Executável (RESOLVIDO)
+
+### **Problema:** Código abstrato - não mostra sintaxe MCP real
+
+### **Solução:** Sintaxe executável completa para delegation-coach.md
+
+**Adicionar ao prompt do delegation-coach.md:**
+
+```markdown
+## 🔚 CÓDIGO MCP PARA ENCERRAMENTO DE SESSÃO
+
+### Passo 3: Registrar no Neo4j (via MCP)
+
+Quando chegar neste passo, use a ferramenta MCP Neo4j:
+
+**Via mcp__neo4j-memory__create_entities:**
+
+\`\`\`json
+{
+  "entities": [
+    {
+      "name": "Sessao_<timestamp>",
+      "type": "CoachingSession",
+      "observations": [
+        "educador_id: <pseudonimo do educador>",
+        "data: <data atual>",
+        "tipo: pre-aula",
+        "perguntas_feitas: <você conta>",
+        "duracao_trocas: <total de mensagens>",
+        "cobriu_problem: <true/false>",
+        "cobriu_platform: <true/false>",
+        "cobriu_task: <true/false>",
+        "gaps_identificados: <número>",
+        "satisfacao_nps: <resposta educador>",
+        "aplicaria_sugestoes: <true/false>",
+        "contexto: <contexto do educador>",
+        "disciplina: <disciplina>"
+      ]
+    }
+  ]
+}
+\`\`\`
+
+**Depois, criar relacionamento:**
+
+\`\`\`json
+{
+  "relations": [
+    {
+      "source": "<pseudonimo_educador>",
+      "target": "Sessao_<timestamp>",
+      "relationType": "PARTICIPOU"
+    }
+  ]
+}
+\`\`\`
+
+**Se houver gaps identificados, criar nós de Gap:**
+
+\`\`\`json
+{
+  "entities": [
+    {
+      "name": "Gap_<timestamp>_1",
+      "type": "Gap",
+      "observations": [
+        "descricao: <descrição do gap>",
+        "subcategoria: <problem/platform/task>",
+        "severidade: <baixa/media/alta>"
+      ]
+    }
+  ]
+}
+\`\`\`
+
+\`\`\`json
+{
+  "relations": [
+    {
+      "source": "Sessao_<timestamp>",
+      "target": "Gap_<timestamp>_1",
+      "relationType": "IDENTIFICOU"
+    }
+  ]
+}
+\`\`\`
+
+**Criar followup pendente (se educador consentiu emails):**
+
+\`\`\`json
+{
+  "entities": [
+    {
+      "name": "Followup_<timestamp>",
+      "type": "FollowupPendente",
+      "observations": [
+        "educador_id: <pseudonimo>",
+        "sessao_original_id: Sessao_<timestamp>",
+        "data_aula_estimada: <data + 7 dias>",
+        "status: pendente"
+      ]
+    }
+  ]
+}
+\`\`\`
+
+---
+
+**Passo 4: Confirmação ao Educador**
+
+"✅ Pronto! Registrei nossa sessão com sucesso.
+
+**ID da Sessão:** Sessao_<timestamp>
+**Suas métricas:** NPS <valor>, Aplicaria: <Sim/Não>
+
+**Próximos passos:**
+1. Aplique as sugestões com seus alunos
+2. Em ~7 dias, você receberá um lembrete para reflexão pós-aula
+3. Nessa reflexão, vamos discutir o que funcionou
+
+Boa aula! 🎓"
+
+---
+
+**Passo 5: Fallback se Neo4j MCP falhar**
+
+Se a ferramenta mcp__neo4j-memory__create_entities retornar erro:
+
+\`\`\`bash
+# Via Bash tool:
+cat > /tmp/coaching_sessions/sessao_$(date +%s).json <<EOF
+{
+  "educador_id": "<pseudonimo>",
+  "data": "$(date -Iseconds)",
+  "satisfacao_nps": <valor>,
+  "aplicaria_sugestoes": <true/false>,
+  "perguntas_feitas": <numero>,
+  "cobriu_problem": <true/false>,
+  "cobriu_platform": <true/false>,
+  "cobriu_task": <true/false>
+}
+EOF
+\`\`\`
+
+"⚠️ Neo4j está offline no momento. Salvei sua sessão localmente e será sincronizada em breve.
+Você ainda receberá seu lembrete normalmente."
+```
+
+---
+
+## 🎯 BLOQUEADOR 9: Gestão de Chaves de Criptografia (RESOLVIDO)
+
+### **Problema:** Criptografia sem definir onde/como gerenciar chaves
+
+### **Solução: Sistema de Chaves Completo**
+
+**Setup Inicial (ANTES do piloto):**
+
+```bash
+# 1. Gerar chave AES-256 (via Fernet)
+python3 << EOF
+from cryptography.fernet import Fernet
+key = Fernet.generate_key()
+print(f"ENCRYPTION_KEY={key.decode()}")
+EOF
+# Output: ENCRYPTION_KEY=<chave-base64>
+
+# 2. Adicionar ao .env (nunca commitear!)
+echo "ENCRYPTION_KEY=<chave-base64>" >> .env
+
+# 3. Adicionar .env ao .gitignore
+echo ".env" >> .gitignore
+
+# 4. Backup da chave (CRÍTICO)
+# Salvar em 2 locais seguros:
+# - Gerenciador de senhas pessoal (1Password, Bitwarden)
+# - Cofre institucional (se houver)
+```
+
+**Código Python para Encriptação:**
+
+```python
+import os
+import json
+from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+
+# Carregar chave do .env
+load_dotenv()
+ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY').encode()
+cipher = Fernet(ENCRYPTION_KEY)
+
+def encriptar_pii(nome, email, instituicao=None):
+    """Encripta PII antes de salvar no Neo4j"""
+    dados_pii = {
+        'nome': nome,
+        'email': email,
+        'instituicao': instituicao
+    }
+    encrypted = cipher.encrypt(json.dumps(dados_pii).encode())
+    return encrypted.decode()  # String base64
+
+def decriptar_pii(encrypted_string):
+    """Decripta PII (apenas para LGPD Art. 18)"""
+    encrypted = encrypted_string.encode()
+    decrypted_bytes = cipher.decrypt(encrypted)
+    return json.loads(decrypted_bytes)
+
+# Uso no Neo4j:
+query = """
+MERGE (pii:PII {pseudonimo: $pseudo_id})
+SET pii.dados_encriptados = $dados_encrypted
+"""
+neo4j.query(query,
+    pseudo_id='EDU_001',
+    dados_encrypted=encriptar_pii('João Silva', 'joao@exemplo.com')
+)
+```
+
+**Rotação de Chaves:**
+- **Piloto (3 meses):** Não necessária
+- **Produção (após piloto):** Anual ou se comprometida
+- **Processo:** Gerar nova chave → re-encriptar todos os PIIs → deletar chave antiga
+
+---
+
+## 🎯 BLOQUEADOR 10: Termo LGPD - Menores (RESOLVIDO)
+
+### **Problema:** Termo sem consentimento de menores de idade
+
+### **Solução: Consentimento Duplo**
+
+**Adicionar ao bloqueador 4, Seção VIII:**
+
+```markdown
+---
+
+## 🔐 PARA MENORES DE 18 ANOS
+
+**LGPD Art. 14, §1º:** Consentimento de menores requer "melhor interesse" e participação dos responsáveis.
+
+### Se o participante tiver **menos de 18 anos:**
+
+#### Consentimento Duplo Obrigatório:
+
+**Responsável Legal:**
+
+Eu, _________________________________ (nome completo),
+CPF ________________, responsável legal por _________________ (menor),
+DECLARO que:
+- Li e compreendi este termo em nome do(a) menor
+- Autorizo a participação do(a) menor no piloto
+- Entendo que posso revogar autorização a qualquer momento
+
+Assinatura responsável: _________________________________
+Data: ___/___/2025
+
+---
+
+**Menor de Idade (se 12+ anos):**
+
+Eu, _________________________________ (nome completo),
+DECLARO que:
+- Entendi a explicação do pesquisador sobre o projeto
+- Quero participar voluntariamente
+- Sei que posso desistir quando quiser
+
+Assinatura menor: _________________________________
+Data: ___/___/2025
+
+---
+
+**Testemunha Presencial (se menor <12 anos):**
+
+Eu, _________________________________ (nome completo),
+CPF ________________,
+Relação com a pesquisa: _________________ (ex: assistente, colega),
+TESTEMUNHO que:
+- Presenciei a explicação ao responsável legal
+- O responsável compreendeu o projeto
+- O consentimento foi dado livre e esclarecidamente
+
+Assinatura testemunha: _________________________________
+Data: ___/___/2025
+
+---
+
+**Justificativa Legal:**
+- LGPD Art. 14, §1º: Tratamento de dados de menores
+- Resolução CNS 466/2012: Pesquisa com seres humanos
+- Código de Ética de Pesquisa: Proteção de populações vulneráveis
+```
+
+---
+
 ## ✅ CHECKLIST DE IMPLEMENTAÇÃO
 
 Antes de recrutar educadores, você DEVE:
-
-- [ ] **1h:** Atualizar README com queries Cypher corrigidas
-- [ ] **2h:** Adicionar modelo de anonimização (pseudônimos) ao README
-- [ ] **1h:** Adicionar protocolo de encerramento ao delegation-coach.md
 - [ ] **2h:** Criar formulário online com termo de consentimento
 - [ ] **1h:** Configurar controle de acesso ao Neo4j (usuário/senha)
 - [ ] **1h:** Testar fluxo completo (sessão → registro Neo4j → query métricas)
