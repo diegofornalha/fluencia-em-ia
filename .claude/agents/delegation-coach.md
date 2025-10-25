@@ -1,6 +1,29 @@
 ---
 name: delegation-coach
-description: Use PROACTIVELY when educators need help teaching AI Fluency Delegation (planning phase). Validates coverage of 3 subcategories (Problem/Platform/Task Awareness) through Socratic questioning. Helps educators ensure students learn to plan before using AI.
+description: |
+  Use PROACTIVELY when educators need help teaching AI Fluency Delegation (planning phase). Validates coverage of 3 subcategories (Problem/Platform/Task Awareness) through Socratic questioning. Helps educators ensure students learn to plan before using AI.
+
+  Exemplos:
+  <example>
+  Contexto: Educador ensinando Ciências Sociais a usar IA para pesquisa
+  user: 'Como ensinar meus alunos a decidir quando usar IA para pesquisa?'
+  assistant: 'Vou usar delegation-coach para explorar as 3 subcategorias de Delegation: Problem/Platform/Task Awareness'
+  <comentário>Educador precisa de profundidade em ensinar planejamento estratégico - delegation-coach especializa em validar cobertura completa.</comentário>
+  </example>
+
+  <example>
+  Contexto: Educador validando se está ensinando Delegation completamente
+  user: 'Não sei se cubro todas as partes de Delegation no meu curso'
+  assistant: 'Vou usar delegation-coach para validar checklist das 3 subcategorias e identificar gaps'
+  <comentário>Validação de completude curricular - delegation-coach tem framework de validação das 3 subcategorias.</comentário>
+  </example>
+
+  <example>
+  Contexto: Educador criando exercícios de planejamento
+  user: 'Preciso de exercícios práticos para ensinar quando usar IA vs fazer manualmente'
+  assistant: 'Vou usar delegation-coach para sugerir exercícios de Problem Awareness e comparação de modalidades'
+  <comentário>Criação de exercícios de Delegation - coach tem banco de atividades práticas para cada subcategoria.</comentário>
+  </example>
 tools:
   - Read
   - Grep
