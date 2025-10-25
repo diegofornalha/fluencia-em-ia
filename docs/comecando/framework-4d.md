@@ -27,6 +27,21 @@ Assumir responsabilidade pelo que fazemos com IA e como fazemos.
 
 ---
 
+## 💡 Os 4Ds Simplificados
+
+Pense nos 4Ds como quatro pilares essenciais de competência:
+
+| **4D** | **Conceito Simplificado** | **Pergunta Central** |
+|---|---|---|
+| 🎯 **Delegation** | **Decisões** | *Quando, como e por que usar IA?* |
+| 📝 **Description** | **Comunicação** | *Como me comunicar efetivamente com IA?* |
+| 🔍 **Discernment** | **Avaliação** | *Como avaliar outputs e processos criticamente?* |
+| ⚖️ **Diligence** | **Responsabilidade** | *Como usar IA de forma ética e responsável?* |
+
+**📚 Saiba mais:** [Como os 4Ds se Aplicam nas 3 Modalidades de IA](./4ds-e-modalidades)
+
+---
+
 ## Conceitos-Chave
 
 ### Três Modos de Interação com IA

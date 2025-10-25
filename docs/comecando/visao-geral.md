@@ -111,6 +111,8 @@ As competências **Delegation, Description, Discernment e Diligence** são cole�
 
 ## Recursos Relacionados
 
-- **Documento completo:** [Framework for AI Fluency V 1.5](https://ringling.libguides.com/ai/framework)
-- **Cheat Sheet:** Terminologia-chave do Framework
-- **Curso:** Teaching the AI Fluency Framework
+- 📖 **[Como os 4Ds se Aplicam nas 3 Modalidades](./4ds-e-modalidades)** - Guia prático conectando competências e modalidades
+- 🎯 **[Framework 4D](./framework-4d)** - Detalhes das quatro competências
+- 📚 **Documento completo:** [Framework for AI Fluency V 1.5](https://ringling.libguides.com/ai/framework)
+- 📝 **Cheat Sheet:** Terminologia-chave do Framework
+- 🎓 **Curso:** Teaching the AI Fluency Framework
