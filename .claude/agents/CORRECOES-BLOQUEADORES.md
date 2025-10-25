@@ -435,6 +435,234 @@ Qualquer dúvida, pode me procurar novamente. Boa aula! 🎓"
 
 ---
 
+---
+
+## 🎯 BLOQUEADOR 6: Sistema de IDs Consistente (RESOLVIDO)
+
+### **Decisão:** Opção A - Pseudônimos Simples
+
+**Justificativa:**
+- ✅ Queries simples e legíveis
+- ✅ Reversibilidade garantida (LGPD Art. 18)
+- ✅ K-anonymity preservado
+- ✅ Sem complexidade desnecessária
+
+### **Modelo Final Neo4j (CONSISTENTE):**
+
+```cypher
+// 1. Nó Educador (PÚBLICO - dados agregados)
+CREATE (e:Educador {
+  id: 'EDU_001',                        // ← Pseudônimo curto
+  perfil_inovacao: 'early_adopter',
+  experiencia_ia: 'basica',
+  contexto: 'formal',
+  disciplina: 'Marketing',
+  pais: 'Brasil',
+  consentimento_email: true,
+  consentimento_data_coleta: true,
+  consentimento_pesquisa: true,
+  data_consentimento: datetime()
+})
+
+// 2. Nó PII (PRIVADO - acesso restrito)
+CREATE (pii:PII {
+  pseudonimo: 'EDU_001',                // ← Link com Educador
+  nome_real: ENCRYPT('João Silva', $chave_master),
+  email_real: ENCRYPT('joao@escola.com', $chave_master),
+  instituicao: ENCRYPT('Universidade XYZ', $chave_master)
+})
+
+// 3. Relacionamento
+CREATE (e)-[:TEM_PII]->(pii)
+```
+
+### **Query de Exclusão LGPD Art. 18 (exemplo completo):**
+
+```cypher
+// Educador João Silva pede exclusão
+// Passo 1: Desenvolvedor recebe email
+// Passo 2: Desenvolvedor executa (acesso ao PII):
+
+// 2.1 - Encontrar pseudônimo
+MATCH (pii:PII)
+WHERE DECRYPT(pii.nome_real, $chave_master) = 'João Silva'
+RETURN pii.pseudonimo
+// Resultado: 'EDU_001'
+
+// 2.2 - Deletar PII
+MATCH (pii:PII {pseudonimo: 'EDU_001'})
+DELETE pii
+
+// 2.3 - Anonimizar Educador (manter para estatísticas)
+MATCH (e:Educador {id: 'EDU_001'})
+SET e.id = 'EDU_DELETADO_' + randomUUID(),
+    e.consentimento_email = false
+REMOVE e.data_consentimento
+
+// 2.4 - Anonimizar sessões
+MATCH (s:CoachingSession {educador_id: 'EDU_001'})
+SET s.educador_id = e.id  // ← Novo ID anonimizado
+
+// Resultado: Dados agregados preservados, PII deletado
+```
+
+---
+
+## 🎯 BLOQUEADOR 7: Protocolo Técnico Completo (RESOLVIDO)
+
+### **Decisão:** Claude executa via MCP Neo4j direto
+
+### **Arquitetura Técnica Completa:**
+
+```mermaid
+Educador → Claude Code → Delegation Coach (prompt) →
+         → [Detecta fim via palavras-chave] →
+         → [Coleta métricas verbalmente] →
+         → [Executa MCP neo4j create_entities] →
+         → [Confirma registro ao educador] →
+         → Fim
+```
+
+### **Implementação no delegation-coach.md:**
+
+Adicionar ao prompt do agente:
+
+```markdown
+## 🔚 PROTOCOLO DE ENCERRAMENTO (EXECUTAR AO FINAL)
+
+### Detectar Fim de Sessão
+
+Você está encerrando a sessão quando educador diz:
+- "Obrigado, era isso"
+- "Acho que já tenho o que preciso"
+- "Até mais" / "Tchau"
+- "Vou implementar isso agora"
+- Ou similar indicando conclusão
+
+### Quando detectar fim, EXECUTE:
+
+**Passo 1: Resumo Verbal**
+"Ótimo, [Nome do Educador]! Vamos encerrar nossa sessão de coaching.
+
+📊 **Resumo do que cobrimos:**
+
+🎯 **Problem Awareness:** Fiz [CONTE quantas] perguntas sobre definição de objetivos
+🔧 **Platform Awareness:** Fiz [CONTE quantas] perguntas sobre escolha de ferramentas
+🤝 **Task Delegation:** Fiz [CONTE quantas] perguntas sobre divisão de trabalho
+⚖️ **Conexão com Diligence:** [Sim/Não] conectamos planejamento com ética
+
+**Gaps identificados:**
+1. [Liste cada gap específico que você revelou]
+2. [Outro gap, se houver]
+[Se nenhum gap: "Não identifiquei gaps - seu planejamento está sólido!"]
+
+**Sugestões práticas oferecidas:**
+1. [Liste exercícios ou perguntas que sugeriu]
+2. [Outras sugestões]"
+
+---
+
+**Passo 2: Coleta de Métricas**
+"Para eu registrar esta sessão e melhorar o coaching, preciso de 2 respostas rápidas:
+
+1️⃣ **Utilidade:** Numa escala de 0 a 10, quão útil foi esta sessão para clarificar como ensinar Delegation aos seus alunos?
+   [Aguarde resposta → armazene como $satisfacao_nps]
+
+2️⃣ **Aplicação:** Você aplicaria pelo menos 1 das sugestões que discutimos na sua próxima aula?
+   - [ ] Sim, com certeza
+   - [ ] Provavelmente sim
+   - [ ] Talvez
+   - [ ] Provavelmente não
+   - [ ] Não
+   [Aguarde resposta → converta para booleano: Sim/Provavelmente=true, resto=false]"
+
+---
+
+**Passo 3: Registro Neo4j (VIA MCP)**
+
+EXECUTE AGORA via mcp__neo4j-memory__create_entities:
+
+```cypher
+CREATE (s:CoachingSession {
+  id: $generate_random_uuid,
+  educador_id: $pseudonimo_do_educador,  // Ex: "EDU_001" (perguntou no início?)
+  data: datetime(),
+  tipo: 'pre-aula',
+
+  // Métricas objetivas (VOCÊ contou):
+  perguntas_feitas: $total_perguntas_que_voce_fez,
+  duracao_trocas: $total_mensagens_trocadas,
+  cobriu_problem: $true_ou_false,
+  cobriu_platform: $true_ou_false,
+  cobriu_task: $true_ou_false,
+  gaps_identificados: $numero_de_gaps_que_revelou,
+
+  // Métricas subjetivas (educador respondeu):
+  satisfacao_nps: $resposta_pergunta_1,
+  aplicaria_sugestoes: $resposta_pergunta_2_convertida,
+
+  // Contexto:
+  contexto: $contexto_do_educador,  // Ex: "Marketing, graduação, formal"
+  disciplina: $disciplina
+})
+
+// Criar nós de Gap (para cada gap identificado):
+CREATE (g1:Gap {
+  descricao: $descricao_gap_1,
+  subcategoria: $qual_subcategoria,  // 'problem', 'platform', ou 'task'
+  severidade: $baixa_media_alta
+})
+CREATE (s)-[:IDENTIFICOU]->(g1)
+
+// Criar followup pendente (se educador consentiu emails):
+CREATE (f:FollowupPendente {
+  educador_id: $pseudonimo,
+  sessao_original_id: $id_da_sessao,
+  data_aula_estimada: datetime() + duration({days: 7}),
+  status: 'pendente'
+})
+```
+
+---
+
+**Passo 4: Confirmação ao Educador**
+"Pronto! Registrei nossa sessão com sucesso. 📊
+
+**Próximos passos sugeridos:**
+1. Aplique as sugestões que discutimos com seus alunos
+2. Em ~7 dias, te envio um lembrete para conversarmos sobre como foi (se você consentiu receber emails)
+3. Nessa sessão pós-aula, vamos refletir sobre o que funcionou e o que pode melhorar
+
+**Dúvidas?** Pode voltar a qualquer momento!
+
+Boa sorte com a aula! 🎓"
+```
+
+---
+
+**Passo 5: Fallback de Erro**
+```python
+# Se mcp__neo4j-memory__create_entities falhar:
+if erro_neo4j:
+    # Informa educador
+    print("⚠️ Não consegui registrar agora (Neo4j offline).")
+    print("Suas respostas foram salvas localmente e serão sincronizadas depois.")
+
+    # Salva em arquivo temporário
+    with open(f'/tmp/coaching_sessions/{uuid}.json', 'w') as f:
+        json.dump({
+            'educador_id': pseudonimo,
+            'data': datetime.now().isoformat(),
+            'satisfacao_nps': nps,
+            # ... resto dos dados
+        }, f)
+
+    # Job cron sincroniza depois:
+    # crontab: */30 * * * * python sync_pending_sessions.py
+```
+
+---
+
 ## ✅ CHECKLIST DE IMPLEMENTAÇÃO
 
 Antes de recrutar educadores, você DEVE:
