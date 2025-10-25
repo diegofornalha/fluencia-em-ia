@@ -101,12 +101,6 @@ description: Rubrica detalhada para avaliar a competência de Description dos es
 
 ---
 
-## 📥 Versão PDF
-
-**[📄 Download: Description Assessment Matrix (PDF Original)](/pdf/matrizes-avaliacao/Description_assessment_matrix.pdf)**
-
----
-
 © 2025 Rick Dakan, Joseph Feller, e Anthropic.
 
 **Licença:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

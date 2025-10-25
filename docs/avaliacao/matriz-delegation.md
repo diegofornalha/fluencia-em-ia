@@ -102,12 +102,6 @@ description: Rubrica detalhada para avaliar a competência de Delegation dos est
 
 ---
 
-## 📥 Versão PDF
-
-**[📄 Download: Delegation Assessment Matrix (PDF Original)](/pdf/matrizes-avaliacao/Delegation_assessment_matrix.pdf)**
-
----
-
 © 2025 Rick Dakan, Joseph Feller, e Anthropic.
 
 **Licença:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

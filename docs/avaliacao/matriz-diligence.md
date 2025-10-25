@@ -102,12 +102,6 @@ description: Rubrica detalhada para avaliar a competência de Diligence dos estu
 
 ---
 
-## 📥 Versão PDF
-
-**[📄 Download: Diligence Assessment Matrix (PDF Original)](/pdf/matrizes-avaliacao/Diligence_assessment_matrix.pdf)**
-
----
-
 © 2025 Rick Dakan, Joseph Feller, e Anthropic.
 
 **Licença:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

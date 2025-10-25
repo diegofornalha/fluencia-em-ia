@@ -281,7 +281,7 @@ Na nossa próxima lição, exploraremos o que estudantes precisam saber para per
 
 ## 📥 Recursos Adicionais
 
-**[📖 Guia de Componentes de Tarefas](./guia-componentes-tarefas)** - Guia prático com exemplos detalhados de componentes de tarefa | **[📄 PDF Original](/pdf/tarefas/Assignment_component_guide.pdf)**
+**[📖 Guia de Componentes de Tarefas](./guia-componentes-tarefas)** - Guia prático com exemplos detalhados de componentes de tarefa
 
 ---
 

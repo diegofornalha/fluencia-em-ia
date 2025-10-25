@@ -20,7 +20,7 @@ Avalia a capacidade dos estudantes de:
 - Escolher ferramentas de IA apropriadas
 - Tomar decisões estratégicas sobre colaboração humano-IA
 
-**[📖 Ver Matriz em PT-BR](./matriz-delegation)** | **[📄 Download PDF Original](/pdf/matrizes-avaliacao/Delegation_assessment_matrix.pdf)**
+**[📖 Ver Matriz em PT-BR](./matriz-delegation)**
 
 ---
 
@@ -31,7 +31,7 @@ Avalia a capacidade dos estudantes de:
 - Criar prompts claros e contextualizados
 - Construir ambientes cognitivos colaborativos
 
-**[📖 Ver Matriz em PT-BR](./matriz-description)** | **[📄 Download PDF Original](/pdf/matrizes-avaliacao/Description_assessment_matrix.pdf)**
+**[📖 Ver Matriz em PT-BR](./matriz-description)**
 
 ---
 
@@ -42,7 +42,7 @@ Avalia a capacidade dos estudantes de:
 - Identificar pontos fortes e fracos
 - Iterar para melhorar resultados
 
-**[📖 Ver Matriz em PT-BR](./matriz-discernment)** | **[📄 Download PDF Original](/pdf/matrizes-avaliacao/Discernment_assessment_matrix.pdf)**
+**[📖 Ver Matriz em PT-BR](./matriz-discernment)**
 
 ---
 
@@ -53,7 +53,7 @@ Avalia a capacidade dos estudantes de:
 - Manter transparência apropriada
 - Assumir responsabilidade por resultados
 
-**[📖 Ver Matriz em PT-BR](./matriz-diligence)** | **[📄 Download PDF Original](/pdf/matrizes-avaliacao/Diligence_assessment_matrix.pdf)**
+**[📖 Ver Matriz em PT-BR](./matriz-diligence)**
 
 ---
 
